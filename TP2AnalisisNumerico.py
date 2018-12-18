@@ -12,7 +12,7 @@ from matplotlib import cm
 
 
 
-def graficarEcuacionDelCalor(tf, J, Nt, nombre1, nombre2, nombre3) :
+def graficarEcuacionDelCalor(D, tf, J, Nt, nombre1, nombre2, nombre3) :
 
     xl=0; xr=1; # x domain [xl,xr]
     dx = (xr-xl) / J; # dx: mesh size
@@ -39,12 +39,12 @@ def graficarEcuacionDelCalor(tf, J, Nt, nombre1, nombre2, nombre3) :
         gr = 0
         if n==0: # first time step
             for j in np.arange(1,J): # interior nodes
-                u[j,n] = f[j] + mu*(f[j+1]-2*f[j]+f[j-1]);
+                u[j,n] = f[j] + dt*f[j]*(1-f[j]) + D*mu*(f[j+1]-2*f[j]+f[j-1]);
             u[0,n] = gl; # the left-end point
             u[J,n] = gr; # the right-end point
         else:
             for j in np.arange(1,J): # interior nodes
-                u[j,n]=u[j,n-1]+mu*(u[j+1,n-1]-2*u[j,n-1]+u[j-1,n-1]);
+                u[j,n]=u[j,n-1] + dt*u[j, n-1]*(1-u[j, n-1]) + D*mu*(u[j+1,n-1]-2*u[j,n-1]+u[j-1,n-1]);
             u[0,n] = gl; # the left-end point
             u[J,n] = gr; # the right-end point
             
@@ -96,7 +96,9 @@ def graficarEcuacionDelCalor(tf, J, Nt, nombre1, nombre2, nombre3) :
     
     return pl
 
-graficarEcuacionDelCalor(0.1, 20, 100, 'CurvasDeNivelCaso1.png','SolucionNumericaCaso1.png', 'EvolucionCaso1.png')
-graficarEcuacionDelCalor(0.3, 15, 500, 'CurvasDeNivelCaso2.png','SolucionNumericaCaso2.png', 'EvolucionCaso2.png')
-graficarEcuacionDelCalor(1, 15, 500, 'CurvasDeNivelCaso3.png','SolucionNumericaCaso3.png', 'EvolucionCaso3.png')
-graficarEcuacionDelCalor(3, 15, 3000, 'CurvasDeNivelCaso4.png','SolucionNumericaCaso4.png', 'EvolucionCaso4.png')
+graficarEcuacionDelCalor(1, 0.1, 20, 100, 'CurvasDeNivelCaso1.png','SolucionNumericaCaso1.png', 'EvolucionCaso1.png')
+graficarEcuacionDelCalor(1, 0.3, 15, 500, 'CurvasDeNivelCaso2.png','SolucionNumericaCaso2.png', 'EvolucionCaso2.png')
+graficarEcuacionDelCalor(1, 1, 15, 500, 'CurvasDeNivelCaso3.png','SolucionNumericaCaso3.png', 'EvolucionCaso3.png')
+graficarEcuacionDelCalor(1, 3, 15, 3000, 'CurvasDeNivelCaso4.png','SolucionNumericaCaso4.png', 'EvolucionCaso4.png')
+graficarEcuacionDelCalor(0.5, 0.1, 20, 100, 'CurvasDeNivelCaso5.png','SolucionNumericaCaso5.png', 'EvolucionCaso5.png')
+graficarEcuacionDelCalor(1.5, 0.3, 15, 500, 'CurvasDeNivelCaso6.png','SolucionNumericaCaso6.png', 'EvolucionCaso6.png')
